@@ -1,8 +1,8 @@
 import React from 'react';
-import Header from './Header';
-import Navbar from './Navbar';
-import BookTable from './BookTable';
-import Modals from './Modal';
+import Header from './components/Header';
+import Navbar from './components/Navbar';
+import BookTable from './components/BookTable';
+import Modals from './components/Modal';
 import './App.css';
 
 function App() {

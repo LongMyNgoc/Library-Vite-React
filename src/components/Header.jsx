@@ -1,6 +1,6 @@
 import React from 'react';
-import cnttLogo from './Pictures/CNTT.png';
-import hcmueLogo from './Pictures/HCMUE.png';
+import cnttLogo from '../Pictures/CNTT.png';
+import hcmueLogo from '../Pictures/HCMUE.png';
 
 const Header = () => (
     <header className="d-flex justify-content-between align-items-center">
