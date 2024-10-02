@@ -1,0 +1,88 @@
+/* App.css */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa; /* Thêm màu nền sáng */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Căn giữa theo chiều ngang */
+}
+
+.header-logo {
+  width: 100px;
+  height: 100px;
+  margin-top: 20px; /* Thêm khoảng cách phía trên */
+}
+
+.container {
+  padding-left: 0; /* Bỏ padding trái */
+  padding-right: 0; /* Bỏ padding phải */
+  width: 100%;
+}
+
+.App {
+  width: 100%; /* Đảm bảo App chiếm toàn bộ chiều rộng */
+  margin: 0; /* Bỏ margin */
+  padding: 0; /* Bỏ padding */
+}
+
+.navbar {
+  margin-bottom: 20px;
+  width: 100%; /* Chiếm toàn bộ chiều rộng */
+  max-width: none; /* Giới hạn chiều rộng tối đa */
+  display: flex;
+  justify-content: center; /* Căn giữa các mục trong navbar */
+  background-color: #343a40; /* Màu nền navbar */
+  padding: 10px 0; /* Padding cho navbar */
+}
+
+.navbar a {
+  color: black; /* Màu chữ cho liên kết */
+  text-decoration: none; /* Bỏ gạch chân */
+  margin: 0 15px; /* Khoảng cách giữa các liên kết */
+  transition: color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+.navbar a:hover {
+  color: #ffc107; /* Màu chữ khi hover */
+}
+
+.table {
+  width: 100%;
+  max-width: 1200px; /* Giới hạn chiều rộng tối đa cho bảng */
+  margin: 20px auto; /* Căn giữa và thêm khoảng cách trên và dưới */
+  border-collapse: collapse; /* Xóa khoảng cách giữa các ô */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng cho bảng */
+  background-color: white; /* Màu nền cho bảng */
+}
+
+.table th, .table td {
+  padding: 12px; /* Thêm padding cho ô */
+  text-align: left; /* Căn trái chữ trong ô */
+  border-bottom: 1px solid #dee2e6; /* Đường viền dưới ô */
+}
+
+.table th {
+  background-color: #343a40; /* Màu nền cho tiêu đề bảng */
+  color: white; /* Màu chữ cho tiêu đề bảng */
+}
+
+.table tr:hover {
+  background-color: #f1f1f1; /* Màu nền cho hàng khi hover */
+}
+
+.table button {
+  padding: 6px 12px; /* Padding cho nút */
+  border: none; /* Bỏ đường viền */
+  border-radius: 4px; /* Bo góc cho nút */
+  background-color: #007bff; /* Màu nền nút */
+  color: white; /* Màu chữ nút */
+  cursor: pointer; /* Con trỏ khi hover qua nút */
+  transition: background-color 0.3s; /* Hiệu ứng chuyển màu nền */
+}
+
+.table button:hover {
+  background-color: #0056b3; /* Màu nền nút khi hover */
+}
