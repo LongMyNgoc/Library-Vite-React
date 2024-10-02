@@ -7,8 +7,8 @@
 ## Cài đặt
 1. Chạy lệnh
    ```bash
-npm install
-```
+   npm install
+   ```
 2. Chạy lệnh
 ```bash
 npm run dev
@@ -21,10 +21,10 @@ Tạo Database bằng thông tin được lưu trong file Library.sql
 - server: my server
 - database: my database
 ## Sử Dụng
-Để chạy dự án, hãy sử dụng lệnh sau:
+Để chạy dự án,vào phần Back-End và sử dụng lệnh sau:
 ```bash
-node Server.js
-```
+   node Server.js
+   ```
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
