@@ -42,7 +42,7 @@ const Books = () => {
         <>
       <div className="d-flex justify-content-center mt-3">
                     <AddBookButton buttonText = "Add Book" /> {/* Thêm button vào đây */}
-                </div>
+                </div>  
             {/* Search Input */}
             <input
                 type="text"

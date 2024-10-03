@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Navbar from './components/Navbar';
 import BookTable from './components/BookTable';
 import Books from './components/Books'; // Import Books component
+import Users from './components/Users';
 import Modals from './components/Modal';
 import './App.css';
 
@@ -19,6 +20,7 @@ function App() {
                             <Routes>
                                 <Route path="/" element={<BookTable />} /> {/* Route cho BookTable */}
                                 <Route path="/books" element={<Books />} /> {/* Route cho Books */}
+                                <Route path="/users" element={<Users />} />
                             </Routes>
                         </div>
                     </div>
