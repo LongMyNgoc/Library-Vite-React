@@ -20,7 +20,7 @@ const Navbar = () => (
                     <ul className="dropdown-menu" aria-labelledby="manageDropdown">
                         <li><a className="dropdown-item" href="/users">User</a></li>
                         <li><a className="dropdown-item" href="/borrowing-records">BorrowingRecords</a></li>
-                        <li><a className="dropdown-item" href="/books">Book</a></li>
+                        <li><a className="dropdown-item" href="/books">Book</a></li> {/* Đường dẫn đến Books.jsx */}
                     </ul>
                 </li>
             </ul>
