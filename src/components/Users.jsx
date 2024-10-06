@@ -8,7 +8,7 @@ const Users = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch('http://localhost:4000/users');
+                const response = await fetch('http://localhost:3000/users');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

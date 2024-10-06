@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import BookTable from './components/BookTable';
 import Books from './components/Books'; // Import Books component
 import Users from './components/Users';
+import BorrowingRecords from './components/BorrowingRecords';
 import Modals from './components/Modal';
 import './App.css';
 
@@ -21,6 +22,7 @@ function App() {
                                 <Route path="/" element={<BookTable />} /> {/* Route cho BookTable */}
                                 <Route path="/books" element={<Books />} /> {/* Route cho Books */}
                                 <Route path="/users" element={<Users />} />
+                                <Route path="/borrowing-records" element={<BorrowingRecords />} />
                             </Routes>
                         </div>
                     </div>
