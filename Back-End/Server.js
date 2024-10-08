@@ -60,6 +60,17 @@ app.get('/borrowingrecords', async (req, res) => {
     }
 });
 
+app.get('/admins', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const result = await sql.query('SELECT * FROM Admins');
+        res.json(result.recordset);
+    } catch (err) {
+        console.error('Lỗi khi lấy dữ liệu admin:', err);
+        res.status(500).json({ message: 'Lỗi khi lấy dữ liệu admin', error: err });
+    }
+});
+
 // Khởi động server
 app.listen(port, () => {
     console.log(`Server đang chạy tại http://localhost:${port}`);
