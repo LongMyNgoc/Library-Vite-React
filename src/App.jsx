@@ -43,14 +43,14 @@ function App() {
                     <div className="row">
                         <div className="col-md-12">
                             <Routes>
-                                <Route path="/" element={<BookTable />} />
+                                <Route path="/" element={<BookTable isLoggedIn={isLoggedIn} user={user} />} />
                                 {isLoggedIn && user?.role === 'admin' && (
                                     <>
                                         <Route path="/users" element={<Users />} />
                                         <Route path="/borrowing-records" element={<BorrowingRecords />} />
+                                        <Route path="/books" element={<Books />} />
                                     </>
                                 )}
-                                <Route path="/books" element={<Books />} />
                             </Routes>
                         </div>
                     </div>

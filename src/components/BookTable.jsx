@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const BookTable = () => {
+const BookTable = ({isLoggedIn, user}) => {
     const [books, setBooks] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -68,10 +68,16 @@ const BookTable = () => {
                                 <td>
                                     <button
                                         className="btn btn-primary"
-                                        onClick={() => alert(`Borrowing book ID: ${book.Book_ID}`)}
+                                        onClick={() => {
+                                            if (isLoggedIn && user?.role === 'user') {
+                                                alert(`Borrowing book ID: ${book.Book_ID}`);
+                                            } else {
+                                                alert('You must be logged in as a user to borrow books.');
+                                            }
+                                        }}
                                     >
                                         Borrow
-                                    </button>
+                                    </button> 
                                 </td>
                             </tr>
                         ))

@@ -120,4 +120,5 @@ CREATE TABLE BorrowingRecords (
 INSERT INTO BorrowingRecords (Username, Book_ID)
 VALUES 
 ('user1', 1),
-('user2', 2);
+('user2', 2),
+('user3', 3);
