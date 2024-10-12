@@ -71,6 +71,34 @@ app.get('/admins', async (req, res) => {
     }
 });
 
+// Middleware để parse JSON từ client
+app.use(express.json());
+
+// Route đăng ký user
+app.post('/users', async (req, res) => {
+    const { username, password, fullname, address } = req.body;
+
+    try {
+        const pool = await sql.connect(config); // Kết nối tới cơ sở dữ liệu
+        const request = pool.request(); // Tạo yêu cầu từ đối tượng pool
+        
+        // Gọi thủ tục lưu trữ để thêm user mới
+        const result = await request
+            .input('username', sql.NVarChar, username)
+            .input('password', sql.NVarChar, password)
+            .input('fullname', sql.NVarChar, fullname)
+            .input('address', sql.NVarChar, address)
+            .execute('sp_add_account_with_available_id');
+        
+        const message = result.recordset[0].Message;
+
+        res.json({ Message: message });
+    } catch (err) {
+        console.error('Lỗi khi đăng ký user:', err);
+        res.status(500).json({ message: 'Lỗi khi đăng ký user', error: err });
+    }
+});
+
 // Khởi động server
 app.listen(port, () => {
     console.log(`Server đang chạy tại http://localhost:${port}`);
