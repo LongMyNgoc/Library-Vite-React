@@ -41,11 +41,6 @@ const BorrowingRecords = () => {
 
     return (
         <>
-            {/* Button Thêm Bản Ghi */}
-            <div className="d-flex justify-content-center mt-3">
-                <AddButton buttonText="Add BorrowingRecord" />
-            </div>
-
             {/* Ô tìm kiếm */}
             <input
                 type="text"
@@ -65,6 +60,7 @@ const BorrowingRecords = () => {
                         <th>Borrow ID</th>
                         <th>Username</th>
                         <th>Book ID</th>
+                        <th>Title</th>
                         <th>Borrow Date</th>
                         <th>Return Date</th>
                         <th>Status</th>
@@ -79,6 +75,7 @@ const BorrowingRecords = () => {
                                 <td>{record.Borrow_ID}</td>
                                 <td>{record.Username}</td>
                                 <td>{record.Book_ID}</td>
+                                <td>{record.Title}</td>
                                 <td>{new Date(record.Borrow_Date).toLocaleDateString()}</td>
                                 <td>{new Date(record.Return_Date).toLocaleDateString()}</td>
                                 <td>{record.Status ? 'Available' : 'Not Available'}</td>

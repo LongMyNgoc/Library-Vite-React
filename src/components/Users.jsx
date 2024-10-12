@@ -40,11 +40,6 @@ const Users = () => {
 
     return (
         <>
-            {/* Nút thêm người dùng */}
-            <div className="d-flex justify-content-center mt-3">
-                <AddButton buttonText="Add User" /> {/* Thêm button thêm người dùng */}
-            </div>  
-
             {/* Ô tìm kiếm */}
             <input
                 type="text"
