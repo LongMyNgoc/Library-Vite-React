@@ -37,7 +37,8 @@ GO
 CREATE PROCEDURE sp_add_borrowing_record_with_available_id
 (
     @username NVARCHAR(100),
-    @book_id INT
+    @book_id INT,
+	@title NVARCHAR(255)
 )
 AS
 BEGIN
@@ -55,8 +56,8 @@ BEGIN
     BEGIN
         -- Insert the borrowing record with the found ID
         SET IDENTITY_INSERT BorrowingRecords ON;
-        INSERT INTO BorrowingRecords (Borrow_ID, Username, Book_ID, Borrow_Date, Status)
-        VALUES (@available_id, @username, @book_id, GETDATE(), 1);
+        INSERT INTO BorrowingRecords (Borrow_ID, Username, Book_ID, Title, Borrow_Date, Status)
+        VALUES (@available_id, @username, @book_id,@title , GETDATE(), 1);
         SET IDENTITY_INSERT BorrowingRecords OFF;
 
         SELECT 'Borrowing record created' AS Message;

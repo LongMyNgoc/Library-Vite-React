@@ -103,12 +103,13 @@ VALUES
 ('user5', 'password5', 'Hoang Van E', '321 Hai Ba Trung, P6, Q1');
 
 CREATE TABLE BorrowingRecords (
-    Borrow_ID INT PRIMARY KEY IDENTITY(1,1), 
-    Username NVARCHAR(100) NOT NULL,         
-    Book_ID INT NOT NULL,                    
-    Borrow_Date DATE DEFAULT GETDATE(),      
-    Return_Date AS DATEADD(DAY, 7, Borrow_Date), 
-    Status BIT DEFAULT 1,                   
+    Borrow_ID INT PRIMARY KEY IDENTITY(1,1),
+    Username NVARCHAR(100) NOT NULL,
+    Book_ID INT NOT NULL,
+    Title NVARCHAR(255) NOT NULL, -- Thêm cột Title
+    Borrow_Date DATE DEFAULT GETDATE(),
+    Return_Date AS DATEADD(DAY, 7, Borrow_Date),
+    Status BIT DEFAULT 1,
     
     CONSTRAINT FK_BorrowingRecords_Users FOREIGN KEY (Username) 
     REFERENCES Users(Username) ON DELETE CASCADE,
@@ -117,8 +118,8 @@ CREATE TABLE BorrowingRecords (
     REFERENCES Books(Book_ID) ON DELETE CASCADE
 );
 
-INSERT INTO BorrowingRecords (Username, Book_ID)
+INSERT INTO BorrowingRecords (Username, Book_ID, Title)
 VALUES 
-('user1', 1),
-('user2', 2),
-('user3', 3);
+('user4', 4, 'Pride and Prejudice'),
+('user5', 5, 'The Catcher in the Rye'),
+('user1', 6, 'Moby Dick');
