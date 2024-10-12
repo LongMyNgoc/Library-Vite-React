@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const BookTable = ({isLoggedIn, user}) => {
+const BookTable = ({ isLoggedIn, user }) => {
     const [books, setBooks] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -26,6 +26,40 @@ const BookTable = ({isLoggedIn, user}) => {
         book.Title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         book.Author.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    // Hàm xử lý khi người dùng nhấn nút "Borrow"
+    const handleBorrowBook = async (book) => {
+        // Kiểm tra xem người dùng đã đăng nhập và có vai trò "user" chưa
+        if (isLoggedIn && user?.role === 'user') {
+            try {
+                const response = await fetch('http://localhost:3000/borrowingrecords', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: user.Username, // Tên người dùng đang đăng nhập
+                        book_id: book.Book_ID,   // ID của cuốn sách muốn mượn
+                        title: book.Title        // Tiêu đề của sách
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(`Successfully borrowed book: ${book.Title}`);
+                } else {
+                    alert(`Failed to borrow book: ${data.Message}`);
+                }
+            } catch (error) {
+                console.error('Error borrowing book:', error);
+                alert('An error occurred while borrowing the book.');
+            }
+        } else {
+            // Nếu người dùng chưa đăng nhập hoặc không có quyền
+            alert('You must be logged in as a user to borrow books.');
+        }
+    };
 
     return (
         <>
@@ -68,16 +102,11 @@ const BookTable = ({isLoggedIn, user}) => {
                                 <td>
                                     <button
                                         className="btn btn-primary"
-                                        onClick={() => {
-                                            if (isLoggedIn && user?.role === 'user') {
-                                                alert(`Borrowing book ID: ${book.Book_ID}`);
-                                            } else {
-                                                alert('You must be logged in as a user to borrow books.');
-                                            }
-                                        }}
+                                        onClick={() => handleBorrowBook(book)} // Gọi hàm borrow khi nhấn
+                                        disabled={book.Status !== 0} // Vô hiệu hóa nếu sách không có sẵn
                                     >
                                         Borrow
-                                    </button> 
+                                    </button>
                                 </td>
                             </tr>
                         ))
