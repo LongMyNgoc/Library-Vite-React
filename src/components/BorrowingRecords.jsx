@@ -26,7 +26,13 @@ const BorrowingRecords = () => {
 
     const filteredBorrowingRecords = borrowingRecords.filter(record =>
         record.Username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        record.Borrow_ID.toString().includes(searchTerm.toLowerCase())
+        record.Borrow_ID.toString().includes(searchTerm.toLowerCase()) ||
+        record.Book_ID.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+        record.Title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        record.Borrow_Date.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+        record.Return_Date.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+        record.Status === true && 'available'.includes(searchTerm.toLowerCase) ||
+        record.Status === false && 'not available'.includes(searchTerm.toLowerCase())
     );
 
     const handleDelete = (borrowId) => {

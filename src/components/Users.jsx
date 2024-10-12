@@ -25,7 +25,11 @@ const Users = () => {
 
     const filteredUsers = users.filter(user =>
         user.Username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.User_ID.toString().toLowerCase().includes(searchTerm.toLowerCase()) // Sử dụng toString() cho User_ID
+        user.User_ID.toString().toLowerCase().includes(searchTerm.toLowerCase()) || // Sử dụng toString() cho User_ID
+        user.Password.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.Fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.Address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.Registration_Date.toString().toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const handleDelete = (userId) => {

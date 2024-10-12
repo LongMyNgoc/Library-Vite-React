@@ -25,7 +25,15 @@ const Books = () => {
 
     const filteredBooks = books.filter(book =>
         book.Title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.Author.toLowerCase().includes(searchTerm.toLowerCase())
+        book.Author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.Book_ID.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.Publisher.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.Price.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.Publication_Year.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.Page_count.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.Stock_date.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.Status === 0 && 'available'.includes(searchTerm.toLowerCase()) ||
+        book.Status === 1 && 'not available'.includes(searchTerm.toLowerCase())
     );
 
     const handleDelete = (bookId) => {
