@@ -99,6 +99,36 @@ app.post('/users', async (req, res) => {
     }
 });
 
+app.post('/books', async (req, res) => {
+    const { title, author, publisher, price, publicationYear, pageCount } = req.body;
+
+    // Log các giá trị nhận được từ request
+    console.log('Received data:', req.body);
+
+    try {
+        const pool = await sql.connect(config); // Kết nối tới cơ sở dữ liệu
+        const request = pool.request(); // Tạo yêu cầu từ đối tượng pool
+
+        // Gọi thủ tục lưu trữ để thêm sách mới
+        const result = await request
+            .input('title', sql.NVarChar, title)
+            .input('author', sql.NVarChar, author)
+            .input('publisher', sql.NVarChar, publisher)
+            .input('price', sql.Decimal(10, 2), price)
+            .input('publication_year', sql.Int, publicationYear)
+            .input('page_count', sql.Int, pageCount)
+            .execute('sp_add_book_with_available_id');
+        
+        const message = result.recordset[0].Message;
+        console.log('Response message:', message); // Log thông báo phản hồi
+
+        res.json({ Message: message });
+    } catch (err) {
+        console.error('Lỗi khi thêm sách:', err); // Log lỗi
+        res.status(500).json({ message: 'Lỗi khi thêm sách', error: err.message });
+    }
+});
+
 // Khởi động server
 app.listen(port, () => {
     console.log(`Server đang chạy tại http://localhost:${port}`);

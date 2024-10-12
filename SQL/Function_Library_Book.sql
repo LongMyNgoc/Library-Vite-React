@@ -39,9 +39,7 @@ CREATE PROCEDURE sp_add_book_with_available_id
     @publisher NVARCHAR(100),
     @price DECIMAL(10, 2),
     @publication_year INT,
-    @page_count INT,
-    @stock_date DATE,
-    @status INT = 0
+    @page_count INT
 )
 AS
 BEGIN
@@ -53,7 +51,7 @@ BEGIN
     -- Thêm sách với ID tìm được
     SET IDENTITY_INSERT Books ON;
     INSERT INTO Books (Book_ID, Title, Author, Publisher, Price, Publication_Year, Page_count, Stock_date, Status)
-    VALUES (@available_id, @title, @author, @publisher, @price, @publication_year, @page_count, @stock_date, @status);
+    VALUES (@available_id, @title, @author, @publisher, @price, @publication_year, @page_count, GETDATE(), 0);
     SET IDENTITY_INSERT Books OFF;
 
     SELECT 'Book created with reused ID' AS Message;
