@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import AddButton from './AddButton'; // Thay đổi AddBookButton thành AddButton để phù hợp với User
+import EditUserModal from './componentsEdit/UserModal'; // Import modal
 
 const Users = () => {
-    const [users, setUsers] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [users, setUsers] = useState([]); // Danh sách users
+    const [filteredUsers, setFilteredUsers] = useState([]); // Danh sách users đã lọc
+    const [searchTerm, setSearchTerm] = useState(''); // Từ khóa tìm kiếm
+    const [selectedUser, setSelectedUser] = useState(null); // Người dùng được chọn để chỉnh sửa
+    const [showModal, setShowModal] = useState(false); // Trạng thái hiển thị modal
 
+    // Fetch danh sách users khi component được mount
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -13,8 +17,7 @@ const Users = () => {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                console.log('Fetched users:', data); // Kiểm tra dữ liệu trả về
-                setUsers(data);
+                setUsers(data); // Cập nhật danh sách users
             } catch (error) {
                 console.error('Error fetching users:', error);
             }
@@ -23,20 +26,31 @@ const Users = () => {
         fetchUsers();
     }, []);
 
-    const filteredUsers = users.filter(user =>
-        user.Username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.User_ID.toString().toLowerCase().includes(searchTerm.toLowerCase()) || // Sử dụng toString() cho User_ID
-        user.Password.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.Fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.Address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.Registration_Date.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // Lọc danh sách users mỗi khi users hoặc searchTerm thay đổi
+    useEffect(() => {
+        const filterUsers = () => {
+            const filtered = users.filter(user =>
+                user.Username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                user.User_ID.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                user.Password.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                user.Fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                user.Address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                new Date(user.Registration_Date).toLocaleDateString().toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFilteredUsers(filtered); // Cập nhật danh sách users đã lọc
+        };
 
+        filterUsers();
+    }, [users, searchTerm]); // Chạy khi users hoặc searchTerm thay đổi
+
+    // Xử lý khi nhấn nút chỉnh sửa
     const handleEdit = (userId) => {
-        alert(`Editing User ID: ${userId}`);
-        // Thêm logic chỉnh sửa người dùng tại đây
+        const userToEdit = users.find(user => user.User_ID === userId); // Tìm user theo User_ID
+        setSelectedUser(userToEdit); // Lưu user được chọn
+        setShowModal(true); // Hiển thị modal
     };
 
+    // Xử lý khi xóa người dùng
     const handleDelete = async (userId) => {
         const confirmDelete = window.confirm(`Bạn có chắc chắn muốn xóa User ID: ${userId} không?`);
         if (confirmDelete) {
@@ -47,11 +61,11 @@ const Users = () => {
                         'Content-Type': 'application/json',
                     },
                 });
-    
+
                 if (response.ok) {
+                    const updatedUsers = users.filter(user => user.User_ID !== userId); // Cập nhật danh sách
+                    setUsers(updatedUsers); // Cập nhật danh sách users
                     alert('Người dùng đã được xóa thành công!');
-                    // Cập nhật lại danh sách người dùng sau khi xóa
-                    setUsers(users.filter(user => user.User_ID !== userId));
                 } else {
                     const errorData = await response.json();
                     alert(`Lỗi khi xóa người dùng: ${errorData.message}`);
@@ -61,22 +75,21 @@ const Users = () => {
                 alert('Có lỗi xảy ra khi xóa người dùng');
             }
         }
-    };    
+    };
 
     return (
         <>
-            {/* Ô tìm kiếm */}
+            {/* Input tìm kiếm */}
             <input
                 type="text"
-                id="searchInput"
                 className="form-control mb-3"
                 placeholder="Tìm kiếm User..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
             />
 
-            {/* Bảng người dùng */}
-            <table className="table table-bordered table-hover" id="usersTable">
+            {/* Bảng hiển thị danh sách users */}
+            <table className="table table-bordered table-hover">
                 <thead className="table-dark">
                     <tr>
                         <th>User ID</th>
@@ -98,10 +111,10 @@ const Users = () => {
                                 <td>{user.Password}</td>
                                 <td>{user.Fullname}</td>
                                 <td>{user.Address}</td>
-                                <td>{new Date(user.Registration_Date).toLocaleDateString()}</td> {/* Định dạng ngày */}
+                                <td>{new Date(user.Registration_Date).toLocaleDateString()}</td>
                                 <td>
                                     <button
-                                        className="btn btn-warning"
+                                        className="btn btn-primary"
                                         onClick={() => handleEdit(user.User_ID)}
                                     >
                                         Edit
@@ -119,11 +132,22 @@ const Users = () => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="8" className="text-center">No users available</td> {/* Đã sửa colspan */}
+                            <td colSpan="8">Không tìm thấy người dùng</td>
                         </tr>
                     )}
                 </tbody>
             </table>
+
+            {/* Modal chỉnh sửa người dùng */}
+            {showModal && (
+                <EditUserModal
+                    show={showModal}
+                    user={selectedUser}
+                    onClose={() => setShowModal(false)}
+                    users={users}
+                    setUsers={setUsers} // Truyền hàm setUsers để cập nhật danh sách users
+                />
+            )}
         </>
     );
 };

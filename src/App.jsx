@@ -4,9 +4,10 @@ import Header from './components/Header';
 import Navbar from './components/Navbar';
 import BookTable from './components/BookTable';
 import Books from './components/Books';
-import Users from './components/Users';
+import UserList from './components/Users';
 import BorrowingRecords from './components/BorrowingRecords';
 import Modals from './components/Modal';
+import { ToastContainer } from 'react-toastify';
 import './App.css';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
 
     return (
         <Router>
+            <ToastContainer />
             <div className="App">
                 <Header />
                 <Navbar isLoggedIn={isLoggedIn} user={user} handleLogout={handleLogout} />
@@ -46,7 +48,7 @@ function App() {
                                 <Route path="/" element={<BookTable isLoggedIn={isLoggedIn} user={user} />} />
                                 {isLoggedIn && user?.role === 'admin' && (
                                     <>
-                                        <Route path="/users" element={<Users />} />
+                                        <Route path="/users" element={<UserList />} />
                                         <Route path="/borrowing-records" element={<BorrowingRecords />} />
                                         <Route path="/books" element={<Books />} />
                                     </>

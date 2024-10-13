@@ -51,3 +51,37 @@ export const deleteUser = async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi xóa người dùng', error: err });
     }
 };
+
+export const updateUser = async (req, res) => {
+    const { user_id } = req.params; // Lấy user_id từ params
+    const { username, password, fullname, address } = req.body; // Lấy thông tin từ body
+
+    try {
+        await connectDB(); // Kết nối đến cơ sở dữ liệu
+        const request = new sql.Request();
+
+        // Thực hiện câu lệnh SQL để cập nhật thông tin người dùng
+        const result = await request
+            .input('user_id', sql.Int, user_id)
+            .input('password', sql.NVarChar, password)
+            .input('fullname', sql.NVarChar, fullname)
+            .input('address', sql.NVarChar, address)
+            .query(`
+                UPDATE Users 
+                SET 
+                    Password = @password, 
+                    Fullname = @fullname, 
+                    Address = @address 
+                WHERE User_ID = @user_id
+            `);
+
+        if (result.rowsAffected[0] === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy người dùng với ID này.' });
+        }
+
+        res.json({ message: 'Thông tin người dùng đã được cập nhật thành công.' });
+    } catch (err) {
+        console.error('Lỗi khi cập nhật người dùng:', err);
+        res.status(500).json({ message: 'Lỗi khi cập nhật người dùng', error: err });
+    }
+};

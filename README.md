@@ -23,7 +23,7 @@ Tạo Database bằng thông tin được lưu trong file Library.sql
 ## Sử Dụng
 Để chạy dự án,vào phần Back-End và sử dụng lệnh sau:
 ```bash
-   node Server.js
+   node main.js
    ```
 # React + Vite
 
