@@ -34,3 +34,28 @@ export const addBorrowingRecord = async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi thêm hồ sơ mượn sách', error: err });
     }
 };
+
+// Xóa hồ sơ mượn sách theo Borrow_ID
+export const deleteBorrow = async (req, res) => {
+    const { borrow_id } = req.params;  // Lấy borrow_id từ params của request
+
+    try {
+        await connectDB();  // Kết nối đến cơ sở dữ liệu
+        const request = new sql.Request();
+
+        // Thực hiện câu lệnh SQL để xóa bản ghi mượn sách dựa trên Borrow_ID
+        const result = await request
+            .input('borrow_id', sql.Int, borrow_id)
+            .query('DELETE FROM BorrowingRecords WHERE Borrow_ID = @borrow_id');
+
+        // Kiểm tra nếu không có bản ghi nào bị ảnh hưởng (không tìm thấy borrow_id)
+        if (result.rowsAffected[0] === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy hồ sơ mượn sách với ID này.' });
+        }
+
+        res.json({ message: 'Hồ sơ mượn sách đã được xóa thành công.' });
+    } catch (err) {
+        console.error('Lỗi khi xóa hồ sơ mượn sách:', err);
+        res.status(500).json({ message: 'Lỗi khi xóa hồ sơ mượn sách', error: err });
+    }
+};

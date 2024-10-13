@@ -32,15 +32,36 @@ const Users = () => {
         user.Registration_Date.toString().toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const handleDelete = (userId) => {
-        alert(`Deleting User ID: ${userId}`);
-        // Thêm logic xóa người dùng tại đây
-    };
-
     const handleEdit = (userId) => {
         alert(`Editing User ID: ${userId}`);
         // Thêm logic chỉnh sửa người dùng tại đây
     };
+
+    const handleDelete = async (userId) => {
+        const confirmDelete = window.confirm(`Bạn có chắc chắn muốn xóa User ID: ${userId} không?`);
+        if (confirmDelete) {
+            try {
+                const response = await fetch(`http://localhost:3000/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+    
+                if (response.ok) {
+                    alert('Người dùng đã được xóa thành công!');
+                    // Cập nhật lại danh sách người dùng sau khi xóa
+                    setUsers(users.filter(user => user.User_ID !== userId));
+                } else {
+                    const errorData = await response.json();
+                    alert(`Lỗi khi xóa người dùng: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error('Lỗi khi xóa người dùng:', error);
+                alert('Có lỗi xảy ra khi xóa người dùng');
+            }
+        }
+    };    
 
     return (
         <>

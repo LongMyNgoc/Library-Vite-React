@@ -36,10 +36,31 @@ const Books = () => {
         book.Status === 1 && 'not available'.includes(searchTerm.toLowerCase())
     );
 
-    const handleDelete = (bookId) => {
-        alert(`Deleting book ID: ${bookId}`);
-        // Thêm logic xóa sách tại đây
-    };
+    const handleDelete = async (bookId) => {
+        const confirmDelete = window.confirm(`Bạn có chắc chắn muốn xóa sách ID: ${bookId} không?`);
+        if (confirmDelete) {
+            try {
+                const response = await fetch(`http://localhost:3000/books/${bookId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+    
+                if (response.ok) {
+                    alert('Sách đã được xóa thành công!');
+                    // Cập nhật lại danh sách sách sau khi xóa
+                    setBooks(books.filter(book => book.Book_ID !== bookId));
+                } else {
+                    const errorData = await response.json();
+                    alert(`Lỗi khi xóa sách: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error('Lỗi khi xóa sách:', error);
+                alert('Có lỗi xảy ra khi xóa sách');
+            }
+        }
+    };    
 
     const handleEdit = (bookId) => {
         alert(`Editing book ID: ${bookId}`);

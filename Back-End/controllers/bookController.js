@@ -29,3 +29,28 @@ export const addBook = async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi thêm sách', error: err });
     }
 };
+
+// Hàm xóa sách theo Book_ID
+export const deleteBook = async (req, res) => {
+    const { book_id } = req.params;  // Lấy book_id từ params của request
+
+    try {
+        await connectDB();  // Kết nối đến cơ sở dữ liệu
+        const request = new sql.Request();
+
+        // Thực hiện câu lệnh SQL để xóa sách dựa trên Book_ID
+        const result = await request
+            .input('book_id', sql.Int, book_id)
+            .query('DELETE FROM Books WHERE Book_ID = @book_id');
+
+        // Kiểm tra nếu không có bản ghi nào bị ảnh hưởng (không tìm thấy book_id)
+        if (result.rowsAffected[0] === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy sách với ID này.' });
+        }
+
+        res.json({ message: 'Sách đã được xóa thành công.' });
+    } catch (err) {
+        console.error('Lỗi khi xóa sách:', err);
+        res.status(500).json({ message: 'Lỗi khi xóa sách', error: err });
+    }
+};

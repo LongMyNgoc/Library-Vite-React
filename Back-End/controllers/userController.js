@@ -27,3 +27,27 @@ export const registerUser = async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi đăng ký user', error: err });
     }
 };
+
+export const deleteUser = async (req, res) => {
+    const { user_id } = req.params;  // Lấy user_id từ params của request
+
+    try {
+        await connectDB();  // Kết nối đến cơ sở dữ liệu
+        const request = new sql.Request();
+
+        // Thực hiện câu lệnh SQL để xóa người dùng dựa trên User_ID
+        const result = await request
+            .input('user_id', sql.Int, user_id)
+            .query('DELETE FROM Users WHERE User_ID = @user_id');
+
+        // Kiểm tra nếu không có bản ghi nào bị ảnh hưởng (không tìm thấy user_id)
+        if (result.rowsAffected[0] === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy người dùng với ID này.' });
+        }
+
+        res.json({ message: 'Người dùng đã được xóa thành công.' });
+    } catch (err) {
+        console.error('Lỗi khi xóa người dùng:', err);
+        res.status(500).json({ message: 'Lỗi khi xóa người dùng', error: err });
+    }
+};

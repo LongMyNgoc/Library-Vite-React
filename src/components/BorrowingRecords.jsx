@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import AddButton from './AddButton';
 
 const BorrowingRecords = () => {
     const [borrowingRecords, setBorrowingRecords] = useState([]);
@@ -31,18 +30,40 @@ const BorrowingRecords = () => {
         record.Title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         record.Borrow_Date.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
         record.Return_Date.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-        record.Status === true && 'available'.includes(searchTerm.toLowerCase) ||
-        record.Status === false && 'not available'.includes(searchTerm.toLowerCase())
+        (record.Status && 'available'.includes(searchTerm.toLowerCase())) ||
+        (!record.Status && 'not available'.includes(searchTerm.toLowerCase()))
     );
 
-    const handleDelete = (borrowId) => {
-        alert(`Deleting borrow ID: ${borrowId}`);
-        // Thêm logic xóa bản ghi tại đây
-    };
+    const handleDelete = async (borrowId) => {
+        const confirmDelete = window.confirm(`Bạn có chắc chắn muốn xóa hồ sơ mượn ID: ${borrowId} không?`);
+        if (confirmDelete) {
+            try {
+                const response = await fetch(`http://localhost:3000/borrowingrecords/${borrowId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+    
+                if (response.ok) {
+                    alert('Hồ sơ mượn đã được xóa thành công!');
+                    // Cập nhật lại danh sách hồ sơ mượn sau khi xóa
+                    setBorrowingRecords(borrowingRecords.filter(record => record.Borrow_ID !== borrowId));
+                } else {
+                    const errorData = await response.json();
+                    alert(`Lỗi khi xóa hồ sơ mượn: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error('Lỗi khi xóa hồ sơ mượn:', error);
+                alert('Có lỗi xảy ra khi xóa hồ sơ mượn');
+            }
+        }
+    };    
 
-    const handleEdit = (borrowId) => {
-        alert(`Editing borrow ID: ${borrowId}`);
+    const handleEdit = async (borrowId) => {
         // Thêm logic chỉnh sửa bản ghi tại đây
+        alert(`Editing borrow ID: ${borrowId}`);
+        // Có thể điều hướng tới trang chỉnh sửa nếu cần
     };
 
     return (
@@ -105,7 +126,7 @@ const BorrowingRecords = () => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan={8} className="text-center">No borrowing records available</td>
+                            <td colSpan={9} className="text-center">No borrowing records available</td>
                         </tr>
                     )}
                 </tbody>
