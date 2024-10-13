@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import EditUserModal from './componentsEdit/UserModal'; // Import modal
+import EditUserModal from './UserModal/UserModal'; // Import modal
 
 const Users = () => {
     const [users, setUsers] = useState([]); // Danh sách users

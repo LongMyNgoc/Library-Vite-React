@@ -123,3 +123,16 @@ VALUES
 ('user4', 4, 'Pride and Prejudice'),
 ('user5', 5, 'The Catcher in the Rye'),
 ('user1', 6, 'Moby Dick');
+
+CREATE TABLE Book_Statistics (
+    Book_Stat_ID INT PRIMARY KEY IDENTITY(1,1),  
+    Book_ID INT FOREIGN KEY REFERENCES Books(Book_ID),  
+    Title VARCHAR(255) NOT NULL,             
+    Author VARCHAR(100) NOT NULL,            
+    Publisher VARCHAR(100) NOT NULL,         
+    Price DECIMAL(10, 2) NOT NULL,           
+    Publication_Year INT NOT NULL,           
+    Page_count INT NOT NULL,                 
+    Stock_date DATE NOT NULL,                
+    Quantity INT DEFAULT 1           
+);
