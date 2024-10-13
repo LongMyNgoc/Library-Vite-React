@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import AddBookButton from './AddButton';
+import { Modal, Button, Form } from 'react-bootstrap'; // Import Modal components
 
 const Books = () => {
     const [books, setBooks] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [selectedBook, setSelectedBook] = useState(null);
+    const [formData, setFormData] = useState({
+        title: '',
+        author: '',
+        publisher: '',
+        price: '',
+        publicationYear: '',
+        pageCount: '',
+    });
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -46,10 +57,9 @@ const Books = () => {
                         'Content-Type': 'application/json',
                     },
                 });
-    
+
                 if (response.ok) {
                     alert('Sách đã được xóa thành công!');
-                    // Cập nhật lại danh sách sách sau khi xóa
                     setBooks(books.filter(book => book.Book_ID !== bookId));
                 } else {
                     const errorData = await response.json();
@@ -60,19 +70,66 @@ const Books = () => {
                 alert('Có lỗi xảy ra khi xóa sách');
             }
         }
-    };    
+    };
 
-    const handleEdit = (bookId) => {
-        alert(`Editing book ID: ${bookId}`);
-        // Thêm logic chỉnh sửa sách tại đây
+    const handleEdit = (book) => {
+        setSelectedBook(book);
+        setFormData({
+            title: book.Title,
+            author: book.Author,
+            publisher: book.Publisher,
+            price: book.Price,
+            publicationYear: book.Publication_Year,
+            pageCount: book.Page_count,
+        });
+        setShowModal(true);
+    };
+
+    const handleModalClose = () => setShowModal(false);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleUpdateBook = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/books/${selectedBook.Book_ID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: formData.title,
+                    author: formData.author,
+                    publisher: formData.publisher,
+                    price: parseFloat(formData.price), // Chuyển đổi giá thành số
+                    publicationYear: parseInt(formData.publicationYear), // Chuyển đổi năm thành số
+                    pageCount: parseInt(formData.pageCount), // Chuyển đổi số trang thành số
+                }),
+            });
+
+            if (response.ok) {
+                alert('Cập nhật sách thành công!');
+                setBooks(books.map(book => (book.Book_ID === selectedBook.Book_ID ? updatedBook : book)));
+                handleModalClose();
+            } else {
+                const errorData = await response.json();
+                alert(`Lỗi khi cập nhật sách: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error('Lỗi khi cập nhật sách:', error);
+        }
     };
 
     return (
         <>
-      <div className="d-flex justify-content-center mt-3">
-                    <AddBookButton buttonText = "Add Book" /> {/* Thêm button vào đây */}
-                </div>  
-            {/* Search Input */}
+            <div className="d-flex justify-content-center mt-3">
+                <AddBookButton buttonText="Add Book" />
+            </div>
             <input
                 type="text"
                 id="searchInput"
@@ -82,7 +139,6 @@ const Books = () => {
                 onChange={e => setSearchTerm(e.target.value)}
             />
 
-            {/* Book Table */}
             <table className="table table-bordered table-hover" id="booksTable">
                 <thead className="table-dark">
                     <tr>
@@ -115,7 +171,7 @@ const Books = () => {
                                 <td>
                                     <button
                                         className="btn btn-warning"
-                                        onClick={() => handleEdit(book.Book_ID)}
+                                        onClick={() => handleEdit(book)}
                                     >
                                         Edit
                                     </button>
@@ -137,6 +193,80 @@ const Books = () => {
                     )}
                 </tbody>
             </table>
+
+            {/* Modal Edit Book */}
+            <Modal show={showModal} onHide={handleModalClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Book</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="formTitle">
+                            <Form.Label>Title</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="title"
+                                value={formData.title}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formAuthor">
+                            <Form.Label>Author</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="author"
+                                value={formData.author}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formPublisher">
+                            <Form.Label>Publisher</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="publisher"
+                                value={formData.publisher}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formPrice">
+                            <Form.Label>Price</Form.Label>
+                            <Form.Control
+                                type="number"
+                                step="0.01"
+                                name="price"
+                                value={formData.price}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formPublicationYear">
+                            <Form.Label>Publication Year</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="publicationYear"
+                                value={formData.publicationYear}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formPageCount">
+                            <Form.Label>Page Count</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="pageCount"
+                                value={formData.pageCount}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleModalClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleUpdateBook}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };

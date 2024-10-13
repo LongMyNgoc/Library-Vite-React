@@ -54,3 +54,44 @@ export const deleteBook = async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi xóa sách', error: err });
     }
 };
+
+// Cập nhật sách theo Book_ID
+export const updateBook = async (req, res) => {
+    const { book_id } = req.params; // Lấy book_id từ params
+    const { title, author, publisher, price, publicationYear, pageCount } = req.body; // Lấy thông tin từ body
+
+    try {
+        await connectDB(); // Kết nối đến cơ sở dữ liệu
+        const request = new sql.Request();
+
+        // Thực hiện câu lệnh SQL để cập nhật thông tin sách
+        const result = await request
+            .input('book_id', sql.Int, book_id)
+            .input('title', sql.NVarChar, title)
+            .input('author', sql.NVarChar, author)
+            .input('publisher', sql.NVarChar, publisher)
+            .input('price', sql.Decimal(10, 2), price)
+            .input('publication_year', sql.Int, publicationYear)
+            .input('page_count', sql.Int, pageCount)
+            .query(`
+                UPDATE Books 
+                SET 
+                    Title = @title,
+                    Author = @author,
+                    Publisher = @publisher,
+                    Price = @price,
+                    Publication_Year = @publication_year,
+                    Page_Count = @page_count
+                WHERE Book_ID = @book_id
+            `);
+
+        if (result.rowsAffected[0] === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy sách với ID này.' });
+        }
+
+        res.json({ message: 'Thông tin sách đã được cập nhật thành công.' });
+    } catch (err) {
+        console.error('Lỗi khi cập nhật sách:', err);
+        res.status(500).json({ message: 'Lỗi khi cập nhật sách', error: err });
+    }
+};
