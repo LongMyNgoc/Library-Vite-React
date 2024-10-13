@@ -34,7 +34,29 @@ const BorrowingRecords = () => {
         (!record.Status && 'not available'.includes(searchTerm.toLowerCase()))
     );
 
-    const handleDelete = async (borrowId) => {
+    const updateBookStatus = async (bookId, status = 0) => {
+        try {
+            const response = await fetch(`http://localhost:3000/books/${bookId}/borrow`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    status, // Truyền status từ client
+                }),
+            });
+    
+            if (response.ok) {
+                console.log('Book status updated successfully');
+            } else {
+                console.error('Failed to update book status');
+            }
+        } catch (error) {
+            console.error('Error updating book status:', error);
+        }
+    };
+
+    const handleDelete = async (borrowId, bookId) => {
         const confirmDelete = window.confirm(`Bạn có chắc chắn muốn xóa hồ sơ mượn ID: ${borrowId} không?`);
         if (confirmDelete) {
             try {
@@ -47,6 +69,7 @@ const BorrowingRecords = () => {
     
                 if (response.ok) {
                     alert('Hồ sơ mượn đã được xóa thành công!');
+                    await updateBookStatus(bookId);
                     // Cập nhật lại danh sách hồ sơ mượn sau khi xóa
                     setBorrowingRecords(borrowingRecords.filter(record => record.Borrow_ID !== borrowId));
                 } else {
@@ -117,7 +140,7 @@ const BorrowingRecords = () => {
                                 <td>
                                     <button
                                         className="btn btn-danger"
-                                        onClick={() => handleDelete(record.Borrow_ID)}
+                                        onClick={() => handleDelete(record.Borrow_ID, record.Book_ID)}
                                     >
                                         Delete
                                     </button>

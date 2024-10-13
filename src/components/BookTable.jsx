@@ -35,7 +35,28 @@ const BookTable = ({ isLoggedIn, user }) => {
         book.Status === 1 && 'not available'.includes(searchTerm.toLowerCase())
     );
 
-    // Hàm xử lý khi người dùng nhấn nút "Borrow"
+    const updateBookStatus = async (bookId, status = 1) => {
+        try {
+            const response = await fetch(`http://localhost:3000/books/${bookId}/borrow`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    status, // Truyền status từ client
+                }),
+            });
+    
+            if (response.ok) {
+                console.log('Book status updated successfully');
+            } else {
+                console.error('Failed to update book status');
+            }
+        } catch (error) {
+            console.error('Error updating book status:', error);
+        }
+    };
+    
     const handleBorrowBook = async (book) => {
         // Kiểm tra xem người dùng đã đăng nhập và có vai trò "user" chưa
         if (isLoggedIn && user?.role === 'user') {
@@ -51,11 +72,13 @@ const BookTable = ({ isLoggedIn, user }) => {
                         title: book.Title        // Tiêu đề của sách
                     }),
                 });
-
+    
                 const data = await response.json();
-
+    
                 if (response.ok) {
                     alert(`Successfully borrowed book: ${book.Title}`);
+                    await updateBookStatus(book.Book_ID); // Gọi cập nhật trạng thái sách
+                    setBooks(books.filter(b => b.Book_ID !== 0));
                 } else {
                     alert(`Failed to borrow book: ${data.Message}`);
                 }
@@ -67,7 +90,7 @@ const BookTable = ({ isLoggedIn, user }) => {
             // Nếu người dùng chưa đăng nhập hoặc không có quyền
             alert('You must be logged in as a user to borrow books.');
         }
-    };
+    };    
 
     return (
         <>

@@ -95,3 +95,32 @@ export const updateBook = async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi cập nhật sách', error: err });
     }
 };
+
+export const borrowBook = async (req, res) => {
+    const { book_id } = req.params; // Lấy Book_ID từ params
+    const { status } = req.body; // Lấy status từ body của request
+
+    try {
+        await connectDB();
+        const request = new sql.Request();
+
+        // Cập nhật Status theo giá trị được truyền từ body
+        const result = await request
+            .input('book_id', sql.Int, book_id)
+            .input('status', sql.Int, status) // Truyền thêm status từ body
+            .query(`
+                UPDATE Books
+                SET Status = @status
+                WHERE Book_ID = @book_id
+            `);
+
+        if (result.rowsAffected[0] === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy sách với ID này.' });
+        }
+
+        res.json({ message: 'Trạng thái sách đã được cập nhật thành công.' });
+    } catch (err) {
+        console.error('Lỗi khi mượn sách:', err);
+        res.status(500).json({ message: 'Lỗi khi cập nhật trạng thái sách', error: err });
+    }
+};
