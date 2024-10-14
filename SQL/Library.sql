@@ -136,3 +136,15 @@ CREATE TABLE Book_Statistics (
     Stock_date DATE NOT NULL,                
     Quantity INT DEFAULT 1           
 );
+
+CREATE TABLE User_Statistics (
+    User_ID INT PRIMARY KEY IDENTITY(1,1),
+    Username NVARCHAR(100) NOT NULL UNIQUE,  
+    Password NVARCHAR(255) NOT NULL,  
+    Fullname NVARCHAR(255),
+    Address NVARCHAR(255), 
+    Registration_Date DATE DEFAULT GETDATE(),
+    Quantity INT DEFAULT 1  
+);
+
+

@@ -97,6 +97,35 @@ const BookTable = ({ isLoggedIn, user }) => {
         }
     };    
 
+    const handleUserStatistics = async (user) => {
+        try {
+            const response = await fetch('http://localhost:3000/userstatistics', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Username: user.Username,
+                    Password: user.Password, // Lưu ý: Tránh gửi mật khẩu qua mạng
+                    Fullname: user.Fullname,
+                    Address: user.Address,
+                }),
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                alert(`Successfully added user statistics: ${user.Fullname}`);
+            } else {
+                console.error(`Failed to add user statistics: ${data.message}`);
+                alert(`Failed to add user statistics: ${data.message}`);
+            }
+        } catch (error) {
+            console.error('Error adding user statistics:', error);
+            alert('An error occurred while adding user statistics.');
+        }
+    };    
+
     const handleBorrowBook = async (book) => {
         // Kiểm tra xem người dùng đã đăng nhập và có vai trò "user" chưa
         if (isLoggedIn && user?.role === 'user') {
@@ -119,6 +148,7 @@ const BookTable = ({ isLoggedIn, user }) => {
                     alert(`Successfully borrowed book: ${book.Title}`);
                     await updateBookStatus(book.Book_ID); // Gọi cập nhật trạng thái sách
                     await handleBookStatistics(book);
+                    await handleUserStatistics(user);
                     setBooks(prevBooks =>
                         prevBooks.map(b => 
                             b.Book_ID === book.Book_ID ? { ...b, Status: 1 } : b
