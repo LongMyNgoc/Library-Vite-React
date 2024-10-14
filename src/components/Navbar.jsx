@@ -10,17 +10,28 @@ const Navbar = ({ isLoggedIn, user, handleLogout }) => (
 
                 {/* Hiển thị MANAGE nếu user là admin */}
                 {isLoggedIn && user?.role === 'admin' && (
-                    <li className="nav-item dropdown">
-                        <a className="nav-link dropdown-toggle" href="#" id="manageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            MANAGE
-                        </a>
-                        <ul className="dropdown-menu" aria-labelledby="manageDropdown">
-                            <li><a className="dropdown-item" href="/users">User</a></li>
-                            <li><a className="dropdown-item" href="/borrowing-records">Borrowing Records</a></li>
-                            <li><a className="dropdown-item" href="/books">Books</a></li>
-                            <li><a className='dropdown-item' href='/book-statistics'>Book Statistics</a></li>
-                        </ul>
-                    </li>
+                    <>
+                        <li className="nav-item dropdown">
+                            <a className="nav-link dropdown-toggle" href="javascript:void(0)" id="manageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                MANAGE
+                            </a>
+                            <ul className="dropdown-menu" aria-labelledby="manageDropdown">
+                                <li><a className="dropdown-item" href="/users">User</a></li>
+                                <li><a className="dropdown-item" href="/borrowing-records">Borrowing Records</a></li>
+                                <li><a className="dropdown-item" href="/books">Books</a></li>
+                            </ul>
+                        </li>
+
+                        <li className="nav-item dropdown">
+                            <a className="nav-link dropdown-toggle" href="javascript:void(0)" id="statisticsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                STATISTICS
+                            </a>
+                            <ul className="dropdown-menu" aria-labelledby="statisticsDropdown">
+                                <li><a className="dropdown-item" href="/user-statistics">User</a></li>
+                                <li><a className='dropdown-item' href='/book-statistics'>Books</a></li>
+                            </ul>
+                        </li>
+                    </>
                 )}
             </ul>
 

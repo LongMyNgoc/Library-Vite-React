@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AddBookButton from './BookModal/AddButtonBookStatistics';
+import TotalBookStatisticsButton from './BookModal/TotalBookStatisticsButton';
 
 const Books = () => {
     const [books, setBooks] = useState([]);
@@ -46,18 +47,8 @@ const Books = () => {
             {/* Sử dụng d-flex và justify-content-around để đặt 3 button trên cùng 1 hàng */}
             <div className="d-flex justify-content-around mt-3">
                 <AddBookButton buttonText="Thống Kê Sách" bookWithMaxQuantity={bookWithMaxQuantity} />
-                <AddBookButton buttonText="Thống Kê User" />
-                <AddBookButton buttonText="Số Lượng Sách" />
+                <TotalBookStatisticsButton books={books} />
             </div>
-            
-            <input
-                type="text"
-                id="searchInput"
-                className="form-control mb-3"
-                placeholder="Tìm kiếm sách..."
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-            />
 
             <table className="table table-bordered table-hover" id="booksTable">
                 <thead className="table-dark">
