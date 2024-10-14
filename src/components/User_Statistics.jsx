@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import StatisticsButton from './UserModal/StatisticsButton';
 
 const Users = () => {
     const [users, setUsers] = useState([]); // Danh sách users
     const [filteredUsers, setFilteredUsers] = useState([]); // Danh sách users đã lọc
     const [searchTerm, setSearchTerm] = useState(''); // Từ khóa tìm kiếm
+    const [userWithMaxQuantity, setUserWithMaxQuantity] = useState(null); // User có Quantity lớn nhất
 
     // Fetch danh sách users khi component được mount
     useEffect(() => {
@@ -15,6 +17,11 @@ const Users = () => {
                 }
                 const data = await response.json();
                 setUsers(data); // Cập nhật danh sách users
+                
+                // Tìm user có Quantity lớn nhất
+                const maxQuantityUser = data.reduce((prev, current) => 
+                    prev.Quantity > current.Quantity ? prev : current, {});
+                setUserWithMaxQuantity(maxQuantityUser);
             } catch (error) {
                 console.error('Error fetching users:', error);
             }
@@ -42,6 +49,9 @@ const Users = () => {
 
     return (
         <>
+            {/* Nút hiển thị thông tin user có Quantity lớn nhất */}
+            <StatisticsButton userWithMaxQuantity={userWithMaxQuantity} />
+
             {/* Bảng hiển thị danh sách users */}
             <table className="table table-bordered table-hover">
                 <thead className="table-dark">
