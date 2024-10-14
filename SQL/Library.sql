@@ -118,6 +118,19 @@ CREATE TABLE BorrowingRecords (
     REFERENCES Books(Book_ID) ON DELETE CASCADE
 );
 
+ALTER TABLE BorrowingRecords
+ADD PenaltyFee AS (
+    CASE 
+        WHEN DATEDIFF(DAY, DATEADD(DAY, 7, Borrow_Date), GETDATE()) > 0 -- Tính toán trực tiếp Return_Date từ Borrow_Date
+        THEN CASE 
+            WHEN DATEDIFF(DAY, DATEADD(DAY, 7, Borrow_Date), GETDATE()) < 30 
+            THEN DATEDIFF(DAY, DATEADD(DAY, 7, Borrow_Date), GETDATE()) * 10000
+            ELSE 1000000
+        END
+        ELSE 0 -- Không trễ hạn, không có phí phạt
+    END
+);
+
 INSERT INTO BorrowingRecords (Username, Book_ID, Title)
 VALUES 
 ('user4', 4, 'Pride and Prejudice'),
@@ -146,5 +159,4 @@ CREATE TABLE User_Statistics (
     Registration_Date DATE DEFAULT GETDATE(),
     Quantity INT DEFAULT 1  
 );
-
 

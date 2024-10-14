@@ -114,6 +114,7 @@ const BorrowingRecords = () => {
                         <th>Borrow Date</th>
                         <th>Return Date</th>
                         <th>Status</th>
+                        <th>PenaltyFee</th>
                         <th>Edit</th>
                         <th>Delete</th>
                     </tr>
@@ -129,6 +130,7 @@ const BorrowingRecords = () => {
                                 <td>{new Date(record.Borrow_Date).toLocaleDateString('en-CA')}</td>
                                 <td>{new Date(record.Return_Date).toLocaleDateString('en-CA')}</td>
                                 <td>{record.Status ? 'Available' : 'Not Available'}</td>
+                                <td>{record.PenaltyFee}</td>
                                 <td>
                                     <button
                                         className="btn btn-warning"
