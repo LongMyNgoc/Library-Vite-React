@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import AddBookButton from './BookModal/AddButtonStatistics';
-import { Modal, Button, Form } from 'react-bootstrap'; // Import Modal components
+import AddBookButton from './BookModal/AddButtonBookStatistics';
 
 const Books = () => {
     const [books, setBooks] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [bookWithMaxQuantity, setBookWithMaxQuantity] = useState(null);
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -14,8 +14,13 @@ const Books = () => {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                console.log('Fetched books:', data); // Kiểm tra dữ liệu trả về
+                console.log('Fetched books:', data);
                 setBooks(data);
+
+                // Tìm sách có Quantity lớn nhất
+                const maxQuantityBook = data.reduce((prev, current) => 
+                    prev.Quantity > current.Quantity ? prev : current, {});
+                setBookWithMaxQuantity(maxQuantityBook);
             } catch (error) {
                 console.error('Error fetching books:', error);
             }
@@ -38,9 +43,13 @@ const Books = () => {
 
     return (
         <>
-            <div className="d-flex justify-content-center mt-3">
-                <AddBookButton buttonText="Thống Kê" />
+            {/* Sử dụng d-flex và justify-content-around để đặt 3 button trên cùng 1 hàng */}
+            <div className="d-flex justify-content-around mt-3">
+                <AddBookButton buttonText="Thống Kê Sách" bookWithMaxQuantity={bookWithMaxQuantity} />
+                <AddBookButton buttonText="Thống Kê User" />
+                <AddBookButton buttonText="Số Lượng Sách" />
             </div>
+            
             <input
                 type="text"
                 id="searchInput"
