@@ -14,7 +14,7 @@
 npm run dev
 ```
 ## Tạo Database
-Tạo Database bằng thông tin được lưu trong file Library.sql
+Tạo Database bằng thông tin được lưu trong file SQL
 ## Điều chỉnh Thông tin kết nối SQLServer trong file Server.js
 - user: username
 - password: password

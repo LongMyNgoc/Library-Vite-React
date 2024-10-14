@@ -111,7 +111,7 @@ const Users = () => {
                                 <td>{user.Password}</td>
                                 <td>{user.Fullname}</td>
                                 <td>{user.Address}</td>
-                                <td>{new Date(user.Registration_Date).toLocaleDateString()}</td>
+                                <td>{new Date(user.Registration_Date).toLocaleDateString('en-CA')}</td>
                                 <td>
                                     <button
                                         className="btn btn-primary"

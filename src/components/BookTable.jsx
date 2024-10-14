@@ -16,24 +16,28 @@ const BookTable = ({ isLoggedIn, user }) => {
                 setBooks(data);
             } catch (error) {
                 console.error('Error fetching books:', error);
+                alert('An error occurred while fetching books.'); // Thông báo cho người dùng
             }
         };
-
+    
         fetchBooks();
     }, []);
-
-    const filteredBooks = books.filter(book =>
-        book.Title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.Author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.Book_ID.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.Publisher.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.Price.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.Publication_Year.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.Page_count.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.Stock_date.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.Status === 0 && 'available'.includes(searchTerm.toLowerCase()) ||
-        book.Status === 1 && 'not available'.includes(searchTerm.toLowerCase())
-    );
+    
+    const filteredBooks = books.filter(book => {
+        const searchTermLower = searchTerm.toLowerCase();
+        return (
+            book.Title.toLowerCase().includes(searchTermLower) ||
+            book.Author.toLowerCase().includes(searchTermLower) ||
+            book.Book_ID.toString().toLowerCase().includes(searchTermLower) ||
+            book.Publisher.toLowerCase().includes(searchTermLower) ||
+            book.Price.toString().toLowerCase().includes(searchTermLower) ||
+            book.Publication_Year.toString().toLowerCase().includes(searchTermLower) ||
+            book.Page_count.toString().toLowerCase().includes(searchTermLower) ||
+            book.Stock_date.toString().toLowerCase().includes(searchTermLower) ||
+            (book.Status === 0 && 'available'.includes(searchTermLower)) ||
+            (book.Status === 1 && 'not available'.includes(searchTermLower))
+        );
+    });    
 
     const updateBookStatus = async (bookId, status = 1) => {
         try {
@@ -50,13 +54,49 @@ const BookTable = ({ isLoggedIn, user }) => {
             if (response.ok) {
                 console.log('Book status updated successfully');
             } else {
+                const errorData = await response.json();
+                alert(`Failed to update book status: ${errorData.message}`);
                 console.error('Failed to update book status');
             }
         } catch (error) {
             console.error('Error updating book status:', error);
+            alert('An error occurred while updating the book status.');
         }
-    };
+    };    
+
+    const handleBookStatistics = async (book) => {
+        try {
+            const response = await fetch('http://localhost:3000/bookstatistics', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    BookID: book.Book_ID,
+                    Title: book.Title,
+                    Author: book.Author,
+                    Publisher: book.Publisher,
+                    Price: book.Price,
+                    Publication_Year: book.Publication_Year,
+                    Page_count: book.Page_count,
+                    Stock_date: book.Stock_date,
+                }),
+            });
     
+            const data = await response.json();
+    
+            if (response.ok) {
+                alert(`Successfully added book statistics: ${book.Title}`);
+            } else {
+                console.error(`Failed to add book statistics: ${data.message}`);
+                alert(`Failed to add book statistics: ${data.message}`);
+            }
+        } catch (error) {
+            console.error('Error adding book:', error);
+            alert('An error occurred while adding the book.');
+        }
+    };    
+
     const handleBorrowBook = async (book) => {
         // Kiểm tra xem người dùng đã đăng nhập và có vai trò "user" chưa
         if (isLoggedIn && user?.role === 'user') {
@@ -78,7 +118,12 @@ const BookTable = ({ isLoggedIn, user }) => {
                 if (response.ok) {
                     alert(`Successfully borrowed book: ${book.Title}`);
                     await updateBookStatus(book.Book_ID); // Gọi cập nhật trạng thái sách
-                    setBooks(books.filter(b => b.Book_ID !== 0));
+                    await handleBookStatistics(book);
+                    setBooks(prevBooks =>
+                        prevBooks.map(b => 
+                            b.Book_ID === book.Book_ID ? { ...b, Status: 1 } : b
+                        )
+                    );
                 } else {
                     alert(`Failed to borrow book: ${data.Message}`);
                 }
@@ -128,7 +173,7 @@ const BookTable = ({ isLoggedIn, user }) => {
                                 <td>{book.Price}</td>
                                 <td>{book.Publication_Year}</td>
                                 <td>{book.Page_count}</td>
-                                <td>{new Date(book.Stock_date).toLocaleDateString()}</td>
+                                <td>{new Date(book.Stock_date).toLocaleDateString('en-CA')}</td> 
                                 <td>{book.Status === 0 ? 'Available' : 'Not Available'}</td>
                                 <td>
                                     <button

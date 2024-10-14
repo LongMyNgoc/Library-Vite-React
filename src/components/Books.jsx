@@ -166,7 +166,7 @@ const Books = () => {
                                 <td>{book.Price}</td>
                                 <td>{book.Publication_Year}</td>
                                 <td>{book.Page_count}</td>
-                                <td>{new Date(book.Stock_date).toLocaleDateString()}</td>
+                                <td>{new Date(book.Stock_date).toLocaleDateString('en-CA')}</td>
                                 <td>{book.Status === 0 ? 'Available' : 'Not Available'}</td>
                                 <td>
                                     <button

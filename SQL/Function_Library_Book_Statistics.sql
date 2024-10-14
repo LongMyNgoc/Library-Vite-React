@@ -1,20 +1,5 @@
 ﻿USE LibraryDB;
 
-CREATE FUNCTION Check_Book_Exists(@BookID INT)
-RETURNS BIT
-AS
-BEGIN
-    DECLARE @Exists BIT;
-
-    -- Kiểm tra xem Book_ID có tồn tại trong bảng Book_Statistics hay không
-    IF EXISTS (SELECT 1 FROM Book_Statistics WHERE Book_ID = @BookID)
-        SET @Exists = 1;  -- Book_ID đã tồn tại
-    ELSE
-        SET @Exists = 0;  -- Book_ID không tồn tại
-
-    RETURN @Exists;
-END;
-
 CREATE PROCEDURE Add_Book_Statistic
     @BookID INT,
     @Title VARCHAR(255),

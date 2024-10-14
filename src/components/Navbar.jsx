@@ -18,7 +18,7 @@ const Navbar = ({ isLoggedIn, user, handleLogout }) => (
                             <li><a className="dropdown-item" href="/users">User</a></li>
                             <li><a className="dropdown-item" href="/borrowing-records">Borrowing Records</a></li>
                             <li><a className="dropdown-item" href="/books">Books</a></li>
-                            <li><a className='dropdown-item' href='book-statistics'>Book Statistics</a></li>
+                            <li><a className='dropdown-item' href='/book-statistics'>Book Statistics</a></li>
                         </ul>
                     </li>
                 )}

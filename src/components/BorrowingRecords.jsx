@@ -126,8 +126,8 @@ const BorrowingRecords = () => {
                                 <td>{record.Username}</td>
                                 <td>{record.Book_ID}</td>
                                 <td>{record.Title}</td>
-                                <td>{new Date(record.Borrow_Date).toLocaleDateString()}</td>
-                                <td>{new Date(record.Return_Date).toLocaleDateString()}</td>
+                                <td>{new Date(record.Borrow_Date).toLocaleDateString('en-CA')}</td>
+                                <td>{new Date(record.Return_Date).toLocaleDateString('en-CA')}</td>
                                 <td>{record.Status ? 'Available' : 'Not Available'}</td>
                                 <td>
                                     <button

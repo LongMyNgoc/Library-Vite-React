@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import BookTable from './components/BookTable';
 import Books from './components/Books';
 import UserList from './components/Users';
+import BookStatistic from './components/Book_Statistics';
 import BorrowingRecords from './components/BorrowingRecords';
 import Modals from './components/Modal';
 import { ToastContainer } from 'react-toastify';
@@ -51,6 +52,7 @@ function App() {
                                         <Route path="/users" element={<UserList />} />
                                         <Route path="/borrowing-records" element={<BorrowingRecords />} />
                                         <Route path="/books" element={<Books />} />
+                                        <Route path='/book-statistics' element={<BookStatistic />} />
                                     </>
                                 )}
                             </Routes>
