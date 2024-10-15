@@ -54,7 +54,7 @@ export const deleteUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     const { user_id } = req.params; // Lấy user_id từ params
-    const { username, password, fullname, address } = req.body; // Lấy thông tin từ body
+    const { password, fullname, address } = req.body; // Lấy thông tin từ body
 
     try {
         await connectDB(); // Kết nối đến cơ sở dữ liệu

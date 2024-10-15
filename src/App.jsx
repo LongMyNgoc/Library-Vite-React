@@ -11,6 +11,7 @@ import BorrowingRecords from './components/BorrowingRecords';
 import PenaltyFee from './components/PenaltyFee';
 import Modals from './components/Modal';
 import HistoryUser from './components/HistoryUser';
+import InformationUser from './components/UserModal/InformationUser';
 import { ToastContainer } from 'react-toastify';
 import './App.css';
 
@@ -31,6 +32,7 @@ function App() {
         setIsLoggedIn(false);
         setUser(null);
         localStorage.removeItem('user'); // Xóa thông tin user khi đăng xuất
+        window.location.href = '/'; // Chuyển hướng về trang chủ
     };
 
     const handleLoginSuccess = (loggedInUser) => {
@@ -63,6 +65,7 @@ function App() {
                                     <>
                                     <Route path="/penaltyfee" element={<PenaltyFee isLoggedIn={isLoggedIn} user={user}/>} />
                                     <Route path='/history' element={<HistoryUser isLoggedIn={isLoggedIn} user={user}/>} />
+                                    <Route path='/information' element={<InformationUser isLoggedIn={isLoggedIn} user={user} handleLogout={handleLogout}/>} />
                                     </>
                                 )}
                             </Routes>
