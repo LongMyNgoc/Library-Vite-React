@@ -70,3 +70,37 @@ export const deleteBorrowHistory = async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi xóa hồ sơ mượn sách', error: err });
     }
 };
+
+// Hàm cập nhật trạng thái và ngày trả sách
+export const editBorrowHistory = async (req, res) => {
+    const { book_id } = req.params; // Nhận history_id từ tham số URL
+
+    try {
+        await connectDB();
+        const request = new sql.Request();
+
+        // Câu truy vấn SQL để cập nhật trạng thái và Return_Date cho hồ sơ mượn sách
+        const query = `
+            UPDATE BorrowHistory
+            SET Status = @status, Return_Date = GETDATE()
+            WHERE Book_ID = @book_id;
+        `;
+
+        // Thực thi câu truy vấn với giá trị từ yêu cầu
+        const result = await request
+            .input('status', sql.NVarChar, 'Returned') // Trạng thái mới là 'Returned'
+            .input('book_id', sql.Int, book_id)
+            .query(query);
+
+        // Kiểm tra xem có bản ghi nào được cập nhật không
+        if (result.rowsAffected[0] === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy hồ sơ mượn sách với ID đã cho' });
+        }
+
+        // Phản hồi thành công
+        res.status(200).json({ Message: 'Hồ sơ mượn sách đã được cập nhật thành công' });
+    } catch (err) {
+        console.error('Lỗi khi cập nhật hồ sơ mượn sách:', err); // Log lỗi
+        res.status(500).json({ message: 'Lỗi khi cập nhật hồ sơ mượn sách', error: err });
+    }
+};

@@ -60,6 +60,25 @@ const BorrowingRecords = ({ isLoggedIn, user }) => {
         }
     };
 
+    const updateBorrowHistory = async (bookId) => {
+        try {
+            const response = await fetch(`http://localhost:3000/borrowhistory/${bookId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                console.log('Borrow status updated successfully');
+            } else {
+                console.error('Failed to update borrow status');
+            }
+        } catch (error) {
+            console.error('Error updating borrow status:', error);
+        }
+    };
+
     const handleDelete = async (borrowId, bookId) => {
         const confirmDelete = window.confirm(`Bạn có chắc chắn muốn xóa hồ sơ mượn ID: ${borrowId} không?`);
         if (confirmDelete) {
@@ -74,6 +93,7 @@ const BorrowingRecords = ({ isLoggedIn, user }) => {
                 if (response.ok) {
                     alert('Hồ sơ mượn đã được xóa thành công!');
                     await updateBookStatus(bookId);
+                    await updateBorrowHistory(bookId);
                     setBorrowingRecords(borrowingRecords.filter(record => record.Borrow_ID !== borrowId));
                 } else {
                     const errorData = await response.json();

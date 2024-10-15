@@ -33,6 +33,31 @@ const BorrowingRecords = ({ isLoggedIn, user }) => {
             record.Return_Date.toString().toLowerCase().includes(searchTerm.toLowerCase())
         );
 
+        const handleDelete = async (historyId) => {
+            const confirmDelete = window.confirm(`Bạn có chắc chắn muốn xóa hồ sơ mượn ID: ${historyId} không?`);
+            if (confirmDelete) {
+                try {
+                    const response = await fetch(`http://localhost:3000/borrowhistory/${historyId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+        
+                    if (response.ok) {
+                        alert('Hồ sơ mượn đã được xóa thành công!');
+                        setBorrowingRecords(borrowingRecords.filter(record => record.History_ID !== historyId));
+                    } else {
+                        const errorData = await response.json();
+                        alert(`Lỗi khi xóa hồ sơ mượn: ${errorData.message}`);
+                    }
+                } catch (error) {
+                    console.error('Lỗi khi xóa hồ sơ mượn:', error);
+                    alert('Có lỗi xảy ra khi xóa hồ sơ mượn');
+                }
+            }
+        };    
+
     return (
         <>
             {error && <div className="alert alert-danger">{error}</div>}
@@ -59,12 +84,12 @@ const BorrowingRecords = ({ isLoggedIn, user }) => {
                                 <td>{record.Book_ID}</td>
                                 <td>{record.Title}</td>
                                 <td>{new Date(record.Borrow_Date).toLocaleDateString('en-CA')}</td>
-                                <td>{new Date(record.Return_Date).toLocaleDateString('en-CA')}</td>
+                                <td>{record.Return_Date ? new Date(record.Return_Date).toLocaleDateString('en-CA') : 'Not returned yet'}</td>
                                 <td>{record.Status}</td>
                                 <td>
                                     <button
                                         className="btn btn-danger"
-                                        onClick={() => handleDelete(record.Borrow_ID, record.Book_ID)}
+                                        onClick={() => handleDelete(record.History_ID)}
                                     >
                                         Delete
                                     </button>
