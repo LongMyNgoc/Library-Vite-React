@@ -16,6 +16,7 @@ const Navbar = ({ isLoggedIn, user, handleLogout }) => (
                         <ul className="dropdown-menu" aria-labelledby="userDropdown">
                             <li><a className="dropdown-item" href="/information">Information</a></li>
                             <li><a className="dropdown-item" href="/penaltyfee">Borrowed Books</a></li>
+                            <li><a className="dropdown-item" href="/history">History of borrowing books</a></li>
                         </ul>
                     </li>
                 )}

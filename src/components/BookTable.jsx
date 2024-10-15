@@ -126,6 +126,34 @@ const BookTable = ({ isLoggedIn, user }) => {
         }
     };    
 
+    const handleBorrowHistory = async (book) => { 
+            try {
+                // Gửi yêu cầu POST để thêm vào BorrowHistory
+                const borrowResponse = await fetch('http://localhost:3000/borrowhistory', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: user.Username, // Tên người dùng đang đăng nhập
+                        book_id: book.Book_ID,   // ID của cuốn sách muốn mượn
+                        title: book.Title,        // Tiêu đề của sách
+                    }),
+                });
+    
+                const borrowData = await borrowResponse.json();
+    
+                if (borrowResponse.ok) {
+                    alert(`Successfully borrowed book: ${book.Title}`);
+                } else {
+                    alert(`Failed to borrow book: ${borrowData.message}`);
+                }
+            } catch (error) {
+                console.error('Error borrowing book:', error);
+                alert('An error occurred while borrowing the book.');
+            }
+    };    
+
     const handleBorrowBook = async (book) => {
         // Kiểm tra xem người dùng đã đăng nhập và có vai trò "user" chưa
         if (isLoggedIn && user?.role === 'user') {
@@ -149,6 +177,7 @@ const BookTable = ({ isLoggedIn, user }) => {
                     await updateBookStatus(book.Book_ID); // Gọi cập nhật trạng thái sách
                     await handleBookStatistics(book);
                     await handleUserStatistics(user);
+                    await handleBorrowHistory(book);
                     setBooks(prevBooks =>
                         prevBooks.map(b => 
                             b.Book_ID === book.Book_ID ? { ...b, Status: 1 } : b

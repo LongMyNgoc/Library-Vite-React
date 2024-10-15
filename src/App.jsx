@@ -10,6 +10,7 @@ import UserStatistics from './components/User_Statistics';
 import BorrowingRecords from './components/BorrowingRecords';
 import PenaltyFee from './components/PenaltyFee';
 import Modals from './components/Modal';
+import HistoryUser from './components/HistoryUser';
 import { ToastContainer } from 'react-toastify';
 import './App.css';
 
@@ -61,6 +62,7 @@ function App() {
                                 {isLoggedIn && user?.role === 'user' && (
                                     <>
                                     <Route path="/penaltyfee" element={<PenaltyFee isLoggedIn={isLoggedIn} user={user}/>} />
+                                    <Route path='/history' element={<HistoryUser isLoggedIn={isLoggedIn} user={user}/>} />
                                     </>
                                 )}
                             </Routes>

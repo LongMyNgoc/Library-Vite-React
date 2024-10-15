@@ -160,3 +160,12 @@ CREATE TABLE User_Statistics (
     Quantity INT DEFAULT 1  
 );
 
+CREATE TABLE BorrowHistory (
+    History_ID INT PRIMARY KEY IDENTITY(1,1), -- ID tự động tăng từ 1
+    Username NVARCHAR(100) NOT NULL, -- Tên người dùng (khóa ngoại từ bảng Users)
+    Book_ID INT NOT NULL, -- ID của sách (khóa ngoại từ bảng Books)
+	Title VARCHAR(255) NOT NULL, 
+    Borrow_Date DATE,  -- Ngày mượn sách
+    Return_Date DATE,  -- Ngày trả sách (có thể NULL nếu chưa trả)
+    Status VARCHAR(20)
+);

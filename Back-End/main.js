@@ -6,6 +6,7 @@ import adminRoutes from './routes/adminRoutes.js';
 import borrowingRecordsRoutes from './routes/borrowingRecordsRoutes.js';  // Thêm route borrowing records
 import bookStatistics from './routes/bookStatisticsRoutes.js';
 import userStatistics from './routes/userStatisticsRoutes.js';
+import borrowHistory from './routes/borrowHistory.js';
 
 const app = express();
 const port = 3000;
@@ -25,6 +26,7 @@ app.use(adminRoutes);
 app.use(borrowingRecordsRoutes);  // Sử dụng route borrowing records
 app.use(bookStatistics);
 app.use(userStatistics);
+app.use(borrowHistory);
 
 app.listen(port, () => {
     console.log(`Server đang chạy tại http://localhost:${port}`);

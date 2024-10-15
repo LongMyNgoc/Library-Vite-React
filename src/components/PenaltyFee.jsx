@@ -4,6 +4,8 @@ const BorrowingRecords = ({ isLoggedIn, user }) => {
     const [borrowingRecords, setBorrowingRecords] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [error, setError] = useState(null);
+    const [showModal, setShowModal] = useState(false); // Quản lý trạng thái hiển thị modal
+    const [selectedRecord, setSelectedRecord] = useState(null); // Quản lý bản ghi được chọn
 
     useEffect(() => {
         const fetchBorrowingRecords = async () => {
@@ -23,9 +25,8 @@ const BorrowingRecords = ({ isLoggedIn, user }) => {
         fetchBorrowingRecords();
     }, []);
 
-    // Lọc các bản ghi dựa trên Username của user hiện tại và điều kiện tìm kiếm
     const filteredBorrowingRecords = borrowingRecords
-        .filter(record => record.Username === user?.Username) // Chỉ hiển thị các bản ghi của user đã đăng nhập
+        .filter(record => record.Username === user?.Username)
         .filter(record =>
             record.Username.toLowerCase().includes(searchTerm.toLowerCase()) ||
             record.Borrow_ID.toString().includes(searchTerm.toLowerCase()) ||
@@ -45,10 +46,10 @@ const BorrowingRecords = ({ isLoggedIn, user }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    status, // Truyền status từ client
+                    status,
                 }),
             });
-    
+
             if (response.ok) {
                 console.log('Book status updated successfully');
             } else {
@@ -69,11 +70,10 @@ const BorrowingRecords = ({ isLoggedIn, user }) => {
                         'Content-Type': 'application/json',
                     },
                 });
-    
+
                 if (response.ok) {
                     alert('Hồ sơ mượn đã được xóa thành công!');
                     await updateBookStatus(bookId);
-                    // Cập nhật lại danh sách hồ sơ mượn sau khi xóa
                     setBorrowingRecords(borrowingRecords.filter(record => record.Borrow_ID !== borrowId));
                 } else {
                     const errorData = await response.json();
@@ -84,15 +84,32 @@ const BorrowingRecords = ({ isLoggedIn, user }) => {
                 alert('Có lỗi xảy ra khi xóa hồ sơ mượn');
             }
         }
-    };    
+    };
+
+    const handleReturnClick = (record) => {
+        if (record.PenaltyFee === 0) {
+            handleDelete(record.Borrow_ID, record.Book_ID); // Xóa ngay nếu không có phí
+        } else {
+            setSelectedRecord(record); // Lưu bản ghi đã chọn
+            setShowModal(true); // Hiển thị modal
+        }
+    };
+
+    const handlePayment = () => {
+        // Xử lý thanh toán phí tại đây (ví dụ, gọi API xử lý thanh toán)
+        alert('Thanh toán thành công!');
+
+        // Sau khi thanh toán thành công, thực hiện xóa
+        handleDelete(selectedRecord.Borrow_ID, selectedRecord.Book_ID);
+
+        // Đóng modal
+        setShowModal(false);
+    };
 
     return (
         <>
-
-            {/* Hiển thị lỗi nếu có */}
             {error && <div className="alert alert-danger">{error}</div>}
 
-            {/* Bảng dữ liệu */}
             <table className="table table-bordered table-hover" id="borrowingRecordsTable">
                 <thead className="table-dark">
                     <tr>
@@ -122,7 +139,7 @@ const BorrowingRecords = ({ isLoggedIn, user }) => {
                                 <td>
                                     <button
                                         className="btn btn-danger"
-                                        onClick={() => handleDelete(record.Borrow_ID, record.Book_ID)}
+                                        onClick={() => handleReturnClick(record)}
                                     >
                                         Return
                                     </button>
@@ -136,6 +153,27 @@ const BorrowingRecords = ({ isLoggedIn, user }) => {
                     )}
                 </tbody>
             </table>
+
+            {/* Modal Thanh toán */}
+            {showModal && (
+                <div className="modal show" style={{ display: 'block' }}>
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Thanh toán phí</h5>
+                                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                            </div>
+                            <div className="modal-body">
+                                <p>Bạn cần thanh toán số tiền: {selectedRecord.PenaltyFee} VNĐ</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Đóng</button>
+                                <button type="button" className="btn btn-primary" onClick={handlePayment}>Thanh toán</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };
