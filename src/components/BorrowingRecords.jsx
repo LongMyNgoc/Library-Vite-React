@@ -83,12 +83,6 @@ const BorrowingRecords = () => {
         }
     };    
 
-    const handleEdit = async (borrowId) => {
-        // Thêm logic chỉnh sửa bản ghi tại đây
-        alert(`Editing borrow ID: ${borrowId}`);
-        // Có thể điều hướng tới trang chỉnh sửa nếu cần
-    };
-
     return (
         <>
             {/* Ô tìm kiếm */}
@@ -115,7 +109,6 @@ const BorrowingRecords = () => {
                         <th>Return Date</th>
                         <th>Status</th>
                         <th>PenaltyFee</th>
-                        <th>Edit</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -131,14 +124,6 @@ const BorrowingRecords = () => {
                                 <td>{new Date(record.Return_Date).toLocaleDateString('en-CA')}</td>
                                 <td>{record.Status ? 'Available' : 'Not Available'}</td>
                                 <td>{record.PenaltyFee}</td>
-                                <td>
-                                    <button
-                                        className="btn btn-warning"
-                                        onClick={() => handleEdit(record.Borrow_ID)}
-                                    >
-                                        Edit
-                                    </button>
-                                </td>
                                 <td>
                                     <button
                                         className="btn btn-danger"
