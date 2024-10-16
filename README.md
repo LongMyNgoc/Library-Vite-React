@@ -9,10 +9,6 @@
    ```bash
    npm install
    ```
-2. Chạy lệnh
-```bash
-npm run dev
-```
 ## Tạo Database
 Tạo Database bằng thông tin được lưu trong file SQL
 ## Điều chỉnh Thông tin kết nối SQLServer trong file Server.js
@@ -21,9 +17,9 @@ Tạo Database bằng thông tin được lưu trong file SQL
 - server: my server
 - database: my database
 ## Sử Dụng
-Để chạy dự án,vào phần Back-End và sử dụng lệnh sau:
+Chạy lệnh
 ```bash
-   node main.js
+   npm run dev
    ```
 # React + Vite
 
