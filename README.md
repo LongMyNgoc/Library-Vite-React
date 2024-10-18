@@ -1,14 +1,16 @@
-# Library
-## Mô tả
-Đây là chương trình quản lý thư viện sử dụng FrameWork React và build tool Vite. Database sử dụng là SQLServer. Ngôn ngữ sử dụng là JavaScript+SWC, HTML, CSS, BootStrap
-## Yêu cầu
-- Cài đặt Node.js v20.17.0
-- Cài đặt SQLServer
-## Cài đặt
-1. Chạy lệnh
+# Library Management System
+
+## Description
+This is a library management program developed using the React framework and Vite as the build tool. The database utilized is SQL Server, and the programming languages used include JavaScript with SWC, HTML, CSS, and Bootstrap.
+
+## Requirements
+- Install Node.js version 20.17.0
+- Install SQL Server
+
+## Installation
+1. Run the following command to install dependencies:
    ```bash
    npm install
-   ```
 ## Tạo Database
 Tạo Database bằng thông tin được lưu trong file SQL
 ## Điều chỉnh Thông tin kết nối SQLServer trong file Server.js
