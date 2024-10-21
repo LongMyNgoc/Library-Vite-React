@@ -1,4 +1,4 @@
-# Library Management System
+# Library Management System (Localhost, LAN)
 
 ## Description
 This is a library management program developed using the React framework and Vite as the build tool. The database utilized is SQL Server, and the programming languages used include JavaScript with SWC, HTML, CSS, and Bootstrap.
@@ -14,7 +14,7 @@ This is a library management program developed using the React framework and Vit
 ## Database Setup
 Create the database using the information stored in the provided SQL file.
 ## Configure SQL Server Connection
-Adjust the SQL Server connection settings in the Server.js file:
+Adjust the SQL Server connection settings in the config.js file:
 - user: your_username
 - password: your_password
 - server: your_server
