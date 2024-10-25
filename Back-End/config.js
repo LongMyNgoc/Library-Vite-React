@@ -2,7 +2,7 @@
 export const dbConfig = {
     user: 'Long',
     password: '123',
-    server: '192.168.100.195',
+    server: 'MSI',
     database: 'LibraryDB',
     options: {
         encrypt: true,
